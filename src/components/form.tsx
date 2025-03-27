@@ -145,9 +145,23 @@ const FormSection = ({ setUpdateTrigger }: { setUpdateTrigger: React.Dispatch<Re
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Amount</FormLabel>
-                <FormControl>
-                  <Input type='number' placeholder='Enter amount' {...field} onChange={(e) => field.onChange(Number(e.target.value))} />
-                </FormControl>
+                <div className='relative'>
+                  <FormControl>
+                    <Input
+                      type='number'
+                      placeholder='Enter amount'
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      className='peer pe-12 ps-6'
+                    />
+                  </FormControl>
+                  <span className='pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-sm text-muted-foreground peer-disabled:opacity-50'>
+                    $
+                  </span>
+                  <span className='pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 text-sm text-muted-foreground peer-disabled:opacity-50'>
+                    USD
+                  </span>
+                </div>
                 <FormMessage />
               </FormItem>
             )}

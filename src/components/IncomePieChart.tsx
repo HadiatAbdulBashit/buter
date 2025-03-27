@@ -1,17 +1,62 @@
-"use client";
-
-import * as React from "react";
 import { Label, Pie, PieChart, Sector } from "recharts";
 import { PieSectorDataItem } from "recharts/types/polar/Pie";
-import { v4 as uuidv4 } from "uuid";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartConfig, ChartContainer, ChartStyle, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartStyle,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 import { INCOME_CATEGORY_COLORS } from "@/constants";
+import { useEffect, useState } from "react";
 
 const chartConfig = {
   income: {
     label: "Income",
+  },
+  Business: {
+    label: "Business",
+    color: "#6DA3A1",
+  },
+  Investments: {
+    label: "Investments",
+    color: "#78B5B2",
+  },
+  "Extra income": {
+    label: "Extra income",
+    color: "#82C7C4",
+  },
+  Deposits: {
+    label: "Deposits",
+    color: "#8CD9D6",
+  },
+  Lottery: {
+    label: "Lottery",
+    color: "#97ECE8",
+  },
+  Gifts: {
+    label: "Gifts",
+    color: "#A3F5F1",
+  },
+  Salary: {
+    label: "Salary",
+    color: "#AEEDEC",
+  },
+  Savings: {
+    label: "Savings",
+    color: "#B9E5E6",
+  },
+  "Rental income": {
+    label: "Rental income",
+    color: "#C5DEDF",
+  },
+  Other: {
+    label: "Other",
+    color: "#D0D6D8",
   },
 } satisfies ChartConfig;
 
@@ -25,9 +70,11 @@ export function IncomePieChart({
   updateTrigger: number;
 }) {
   const id = "pie-income";
-  const [incomeData, setIncomeData] = React.useState<{ category: string; total: number; fill: string }[]>([]);
+  const [incomeData, setIncomeData] = useState<{ category: string; total: number; fill: string }[]>([]);
 
-  React.useEffect(() => {
+  // console.log(incomeData);
+
+  useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("budgetData") || "{}");
     const incomes = storedData.income || [];
 
@@ -72,19 +119,36 @@ export function IncomePieChart({
         </div>
       </CardHeader>
       <CardContent className='flex flex-1 justify-center pb-0'>
-        <ChartContainer id={id} config={chartConfig} className='mx-auto aspect-square w-full max-w-[300px]'>
+        <ChartContainer id={id} config={chartConfig} className='mx-auto aspect-square w-full max-w-full'>
           <PieChart>
-            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+            <ChartTooltip cursor={true} content={<ChartTooltipContent hideLabel />} />
             <Pie
               data={incomeData}
               dataKey='total'
               nameKey='category'
               innerRadius={60}
               strokeWidth={5}
+              labelLine={false}
+              label={({ payload, ...props }) => {
+                return (
+                  <text
+                    cx={props.cx}
+                    cy={props.cy}
+                    x={props.x}
+                    y={props.y}
+                    textAnchor={props.textAnchor}
+                    dominantBaseline={props.dominantBaseline}
+                    fill='hsla(var(--foreground))'
+                    className='fill-foreground'
+                  >
+                    {payload.total}
+                  </text>
+                );
+              }}
               activeShape={({ outerRadius = 0, ...props }: PieSectorDataItem) => (
                 <g>
-                  <Sector {...props} outerRadius={outerRadius + 10} />
-                  <Sector {...props} outerRadius={outerRadius + 25} innerRadius={outerRadius + 12} />
+                  <Sector {...props} outerRadius={outerRadius + 5} />
+                  <Sector {...props} outerRadius={outerRadius + 12} innerRadius={outerRadius + 7} />
                 </g>
               )}
             >
@@ -105,6 +169,10 @@ export function IncomePieChart({
                 }}
               />
             </Pie>
+            <ChartLegend
+              content={<ChartLegendContent nameKey='category' />}
+              className='-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center min-w-fit'
+            />
           </PieChart>
         </ChartContainer>
       </CardContent>

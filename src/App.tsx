@@ -49,7 +49,7 @@ function App() {
     <>
       <div className='container mx-auto py-4'>
         <h1>Monager</h1>
-        <div className='flex gap-2 items-center mb-8'>
+        <div className='flex gap-2 items-center mb-8 justify-between'>
           <ScrollArea className='whitespace-nowrap overflow-hidden'>
             <div className='flex w-max space-x-2'>
               {filteredMonths.map((month, index) => (
@@ -65,36 +65,37 @@ function App() {
             </div>
             <ScrollBar orientation='horizontal' />
           </ScrollArea>
+          <div className='flex gap-2'>
+            <Select onValueChange={handleYearChange} defaultValue={year.toString()}>
+              <SelectTrigger className='w-fit'>
+                <SelectValue placeholder='Pilih Tahun' />
+              </SelectTrigger>
+              <SelectContent>
+                {[...Array(5)].map((_, i) => (
+                  <SelectItem key={currentYear - i} value={(currentYear - i).toString()}>
+                    {currentYear - i}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-          <Select onValueChange={handleYearChange} defaultValue={year.toString()}>
-            <SelectTrigger className='w-fit'>
-              <SelectValue placeholder='Pilih Tahun' />
-            </SelectTrigger>
-            <SelectContent>
-              {[...Array(5)].map((_, i) => (
-                <SelectItem key={currentYear - i} value={(currentYear - i).toString()}>
-                  {currentYear - i}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant='outline' size='icon'>
-                <Sun className='h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0' />
-                <Moon className='absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100' />
-                <span className='sr-only'>Toggle theme</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
-              <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant='outline' size='icon'>
+                  <Sun className='h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0' />
+                  <Moon className='absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100' />
+                  <span className='sr-only'>Toggle theme</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align='end'>
+                <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
-        <div className='grid grid-cols-3 gap-4'>
+        <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'>
           <div>
             <IncomePieChart selectedMonth={(activeMonth + 1).toString()} selectedYear={year.toString()} updateTrigger={updateTrigger} />
           </div>

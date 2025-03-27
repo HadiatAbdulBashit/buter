@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import { format, parseISO } from "date-fns";
-import { DollarSign, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 
@@ -55,16 +55,12 @@ const HistorySection = ({ month, year, updateTrigger, setUpdateTrigger }: Histor
       {filteredData.length > 0 ? (
         <div className='grid gap-2'>
           {filteredData.map((item, index) => (
-            <Card key={index} className='p-4 border gap-4 flex-row'>
-              <div>
-                <div
-                  className={`${
-                    item.type === "income" ? "bg-green-600" : "bg-red-600"
-                  } rounded-full aspect-square h-full flex items-center justify-center`}
-                >
-                  <DollarSign className='text-white' />
-                </div>
-              </div>
+            <Card
+              key={index}
+              className={`p-4 border gap-4 flex-row border-l-4 md:border-l-8 ${
+                item.type === "income" ? "border-l-green-500" : "border-l-red-600"
+              }`}
+            >
               <div className='grow'>
                 <CardContent className='p-0'>
                   <div className='flex justify-between'>
@@ -73,12 +69,11 @@ const HistorySection = ({ month, year, updateTrigger, setUpdateTrigger }: Histor
                       {item.type === "income" ? "+ " : "- "} ${item.amount}
                     </p>
                   </div>
-                  <div className='flex justify-between'>
+                  <div className='flex justify-between items-end gap-2'>
                     <div>
                       <p className='text-gray-500'>Date: {format(parseISO(item.date), "PPP")}</p>
                       {item.note && <p className='text-gray-500'>Note: {item.note}</p>}
                     </div>
-
                     <Button variant={"outline"} onClick={() => handleDelete(item.id, item.type)} className='p-1'>
                       <Trash2 className='h-5 w-5' />
                     </Button>

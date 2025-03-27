@@ -120,6 +120,5 @@
 }
 
 .container {
-  padding-right: 2rem;
-  padding-left: 2rem;
+  @apply px-4 md:px-8;
 }
