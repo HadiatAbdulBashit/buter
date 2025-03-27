@@ -1,0 +1,25 @@
+export const EXPENSE_CATEGORY = [
+  "Bills",
+  "Car",
+  "Clothes",
+  "Travel",
+  "Food",
+  "Shopping",
+  "House",
+  "Entertainment",
+  "Phone",
+  "Pets",
+  "Other",
+];
+export const INCOME_CATEGORY = [
+  "Business",
+  "Investments",
+  "Extra income",
+  "Deposits",
+  "Lottery",
+  "Gifts",
+  "Salary",
+  "Savings",
+  "Rental income",
+  "Other",
+];
