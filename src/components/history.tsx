@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardTitle } from "./ui/card";
 import { format, parseISO } from "date-fns";
 import { DollarSign, Trash2 } from "lucide-react";
 import { toast } from "sonner";

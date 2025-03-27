@@ -4,10 +4,15 @@ import { ScrollArea, ScrollBar } from "./components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui/select";
 import FromSection from "./components/form";
 import HistorySection from "./components/history";
+import { useTheme } from "./components/theme-provider";
+import { Moon, Sun } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./components/ui/dropdown-menu";
+import { IncomePieChart } from "./components/IncomePieChart";
 
 function App() {
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
+  const { setTheme } = useTheme();
 
   const [year, setYear] = useState<number>(currentYear);
   const [activeMonth, setActiveMonth] = useState<number>(currentMonth);
@@ -73,9 +78,26 @@ function App() {
               ))}
             </SelectContent>
           </Select>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant='outline' size='icon'>
+                <Sun className='h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0' />
+                <Moon className='absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100' />
+                <span className='sr-only'>Toggle theme</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end'>
+              <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <div className='grid grid-cols-3 gap-4'>
-          <div>grapf</div>
+          <div>
+            <IncomePieChart selectedMonth={(activeMonth + 1).toString()} selectedYear={year.toString()} updateTrigger={updateTrigger} />
+          </div>
           <div>
             <HistorySection month={activeMonth + 1} year={year} updateTrigger={updateTrigger} setUpdateTrigger={setUpdateTrigger} />
           </div>
