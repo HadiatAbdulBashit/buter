@@ -3,6 +3,7 @@ import { Button } from "./components/ui/button";
 import { ScrollArea, ScrollBar } from "./components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui/select";
 import FromSection from "./components/form";
+import HistorySection from "./components/history";
 
 function App() {
   const currentYear = new Date().getFullYear();
@@ -10,6 +11,7 @@ function App() {
 
   const [year, setYear] = useState<number>(currentYear);
   const [activeMonth, setActiveMonth] = useState<number>(currentMonth);
+  const [updateTrigger, setUpdateTrigger] = useState(0);
 
   const months = [
     "Januari",
@@ -74,9 +76,11 @@ function App() {
         </div>
         <div className='grid grid-cols-3 gap-4'>
           <div>grapf</div>
-          <div>grapf</div>
           <div>
-            <FromSection />
+            <HistorySection month={activeMonth + 1} year={year} updateTrigger={updateTrigger} setUpdateTrigger={setUpdateTrigger} />
+          </div>
+          <div>
+            <FromSection setUpdateTrigger={setUpdateTrigger} />
           </div>
         </div>
       </div>

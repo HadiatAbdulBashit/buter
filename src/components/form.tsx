@@ -15,6 +15,7 @@ import { Calendar } from "./ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 import { EXPENSE_CATEGORY, INCOME_CATEGORY } from "@/constants";
+import { v4 as uuidv4 } from "uuid";
 
 const formSchema = z.object({
   type: z.enum(["income", "expense"]),
@@ -24,7 +25,7 @@ const formSchema = z.object({
   note: z.string().optional(),
 });
 
-const FormSection = () => {
+const FormSection = ({ setUpdateTrigger }: { setUpdateTrigger: React.Dispatch<React.SetStateAction<number>> }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm({
@@ -43,19 +44,25 @@ const FormSection = () => {
     setTimeout(() => {
       const storedData = JSON.parse(localStorage.getItem("budgetData") || "{}");
 
+      const newData = {
+        id: uuidv4(), // 🆕 Tambahkan ID unik
+        ...data,
+        date: data.date.toISOString(), // Simpan sebagai string ISO agar kompatibel
+      };
+
       // Pastikan ada kategori untuk income dan expense
       if (!storedData.income) storedData.income = [];
       if (!storedData.expense) storedData.expense = [];
 
       // Tambahkan data baru berdasarkan tipe
-      storedData[data.type].push(data);
+      storedData[data.type].push(newData);
 
       // Simpan kembali ke localStorage
       localStorage.setItem("budgetData", JSON.stringify(storedData));
 
       toast.success("Budget added successfully");
-      console.log("Saved Data:", storedData);
 
+      setUpdateTrigger((prev) => prev + 1);
       setIsLoading(false);
     }, 1);
   };
@@ -77,7 +84,6 @@ const FormSection = () => {
             name='type'
             render={({ field }) => (
               <FormItem>
-                <FormLabel></FormLabel>
                 <div className='grid grid-cols-2 gap-4'>
                   <Card
                     className={cn(
