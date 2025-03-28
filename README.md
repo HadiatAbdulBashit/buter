@@ -4,7 +4,7 @@
 
 The **Budget Tracker Application** is a financial management tool designed to help users track their income and expenses efficiently. The application provides insightful visualizations using Pie Charts and Area Charts to analyze spending patterns and financial trends over time.
 
-## [Live View](https://hadiatabdulbashit.github.io/sublime-react)
+## [Live View](https://hadiatabdulbashit.github.io/buter)
 
 ## Features
 
