@@ -24,7 +24,7 @@ export const INCOME_CATEGORY = [
   "Other",
 ];
 export const INCOME_CATEGORY_COLORS: Record<string, string> = {
-  Business: "#6DA3A1", // Pastel teal (darker)
+  Business: "#6DA3A1",
   Investments: "#78B5B2",
   "Extra income": "#82C7C4",
   Deposits: "#8CD9D6",
@@ -33,5 +33,46 @@ export const INCOME_CATEGORY_COLORS: Record<string, string> = {
   Salary: "#AEEDEC",
   Savings: "#B9E5E6",
   "Rental income": "#C5DEDF",
-  Other: "#D0D6D8", // Lightest shade
+  Other: "#D0D6D8",
+};
+export const EXPENSE_CATEGORY_COLORS: Record<string, string> = {
+  Bills: "#D32F2F",
+  Car: "#E53935",
+  Clothes: "#F44336",
+  Travel: "#EF5350",
+  Food: "#E57373",
+  Shopping: "#FF8A80",
+  House: "#FF5252",
+  Entertainment: "#D50000",
+  Phone: "#C62828",
+  Pets: "#B71C1C",
+  Other: "#FF1744",
+};
+
+export const INCOME_CHAR_CONFIG = {
+  income: { label: "Income" },
+  Business: { label: "Business", color: "#6DA3A1" },
+  Investments: { label: "Investments", color: "#78B5B2" },
+  "Extra income": { label: "Extra income", color: "#82C7C4" },
+  Deposits: { label: "Deposits", color: "#8CD9D6" },
+  Lottery: { label: "Lottery", color: "#97ECE8" },
+  Gifts: { label: "Gifts", color: "#A3F5F1" },
+  Salary: { label: "Salary", color: "#AEEDEC" },
+  Savings: { label: "Savings", color: "#B9E5E6" },
+  "Rental income": { label: "Rental income", color: "#C5DEDF" },
+  Other: { label: "Other", color: "#D0D6D8" },
+};
+
+export const EXPENSE_CHART_CONFIG = {
+  Bills: { label: "Bills", color: "#D32F2F" },
+  Car: { label: "Car", color: "#E53935" },
+  Clothes: { label: "Clothes", color: "#F44336" },
+  Travel: { label: "Travel", color: "#EF5350" },
+  Food: { label: "Food", color: "#E57373" },
+  Shopping: { label: "Shopping", color: "#FF8A80" },
+  House: { label: "House", color: "#FF5252" },
+  Entertainment: { label: "Entertainment", color: "#D50000" },
+  Phone: { label: "Phone", color: "#C62828" },
+  Pets: { label: "Pets", color: "#B71C1C" },
+  Other: { label: "Other", color: "#FF1744" },
 };

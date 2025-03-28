@@ -49,8 +49,8 @@ const HistorySection = ({ month, year, updateTrigger, setUpdateTrigger }: Histor
   };
 
   return (
-    <div className='space-y-6'>
-      <h2 className='text-2xl font-semibold mb-4'>History for {format(new Date(year, month - 1), "MMMM yyyy")}</h2>
+    <>
+      <h2 className='text-xl font-semibold mb-4'>History for {format(new Date(year, month - 1), "MMMM yyyy")}</h2>
 
       {filteredData.length > 0 ? (
         <div className='grid gap-2'>
@@ -86,7 +86,7 @@ const HistorySection = ({ month, year, updateTrigger, setUpdateTrigger }: Histor
       ) : (
         <p className='text-gray-500'>No transactions found for this month.</p>
       )}
-    </div>
+    </>
   );
 };
 

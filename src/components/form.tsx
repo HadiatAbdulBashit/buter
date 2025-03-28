@@ -75,7 +75,7 @@ const FormSection = ({ setUpdateTrigger }: { setUpdateTrigger: React.Dispatch<Re
 
   return (
     <>
-      <h2 className='text-2xl font-semibold text-center mb-4'>Add Budget</h2>
+      <h2 className='text-xl font-semibold text-center mb-4'>Add Budget</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
           {/* Type Selection with Cards */}
@@ -88,7 +88,7 @@ const FormSection = ({ setUpdateTrigger }: { setUpdateTrigger: React.Dispatch<Re
                   <Card
                     className={cn(
                       "w-full py-2 cursor-pointer border-2 transition-all",
-                      field.value === "income" ? "border-green-500 shadow-md" : "border-gray-300"
+                      field.value === "income" ? "border-green-500" : "border-gray-300"
                     )}
                     onClick={() => field.onChange("income")}
                   >
@@ -100,7 +100,7 @@ const FormSection = ({ setUpdateTrigger }: { setUpdateTrigger: React.Dispatch<Re
                   <Card
                     className={cn(
                       "w-full py-2 cursor-pointer border-2 transition-all",
-                      field.value === "expense" ? "border-red-500 shadow-md" : "border-gray-300"
+                      field.value === "expense" ? "border-red-500" : "border-gray-300"
                     )}
                     onClick={() => field.onChange("expense")}
                   >

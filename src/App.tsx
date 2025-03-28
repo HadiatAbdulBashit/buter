@@ -7,7 +7,10 @@ import HistorySection from "./components/history";
 import { useTheme } from "./components/theme-provider";
 import { Moon, Sun } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./components/ui/dropdown-menu";
-import { IncomePieChart } from "./components/IncomePieChart";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./components/ui/accordion";
+import { DrawerDialogBudget } from "./components/drawer-dialog";
+import PieChartComponent from "./components/pie-chart";
+import { EXPENSE_CATEGORY_COLORS, EXPENSE_CHART_CONFIG, INCOME_CATEGORY_COLORS, INCOME_CHAR_CONFIG } from "./constants";
 
 function App() {
   const currentYear = new Date().getFullYear();
@@ -18,20 +21,9 @@ function App() {
   const [activeMonth, setActiveMonth] = useState<number>(currentMonth);
   const [updateTrigger, setUpdateTrigger] = useState(0);
 
-  const months = [
-    "Januari",
-    "Februari",
-    "Maret",
-    "April",
-    "Mei",
-    "Juni",
-    "Juli",
-    "Agustus",
-    "September",
-    "Oktober",
-    "November",
-    "Desember",
-  ];
+  const months = Array.from({ length: 12 }, (_, i) =>
+    new Intl.DateTimeFormat(navigator.language, { month: "long" }).format(new Date(2000, i, 1))
+  );
 
   const filteredMonths = year === currentYear ? months.slice(0, currentMonth + 1) : months;
 
@@ -48,8 +40,10 @@ function App() {
   return (
     <>
       <div className='container mx-auto py-4'>
-        <h1>Monager</h1>
-        <div className='flex gap-2 items-center mb-8 justify-between'>
+        <h1 className='font-semibold text-2xl text-center mb-4 border-b-4 border-b-primary sm:border-0 sm:text-left'>
+          Buter: Budget Tracker
+        </h1>
+        <div className='flex gap-2 items-center mb-2 sm:mb-8 justify-between'>
           <ScrollArea className='whitespace-nowrap overflow-hidden'>
             <div className='flex w-max space-x-2'>
               {filteredMonths.map((month, index) => (
@@ -93,16 +87,46 @@ function App() {
                 <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            <div className='xl:hidden'>
+              <DrawerDialogBudget setUpdateTrigger={setUpdateTrigger} />
+            </div>
           </div>
         </div>
         <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'>
           <div>
-            <IncomePieChart selectedMonth={(activeMonth + 1).toString()} selectedYear={year.toString()} updateTrigger={updateTrigger} />
+            <Accordion type='multiple' defaultValue={["item-1"]}>
+              <AccordionItem value='item-1'>
+                <AccordionTrigger>Total Income per category</AccordionTrigger>
+                <AccordionContent>
+                  <PieChartComponent
+                    selectedMonth={activeMonth + 1}
+                    selectedYear={year}
+                    updateTrigger={updateTrigger}
+                    selectedBudget='income'
+                    chartConfigProps={INCOME_CHAR_CONFIG}
+                    categoryColors={INCOME_CATEGORY_COLORS}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value='item-2'>
+                <AccordionTrigger>Total Expense per category</AccordionTrigger>
+                <AccordionContent>
+                  <PieChartComponent
+                    selectedMonth={activeMonth + 1}
+                    selectedYear={year}
+                    updateTrigger={updateTrigger}
+                    selectedBudget='expense'
+                    chartConfigProps={EXPENSE_CHART_CONFIG}
+                    categoryColors={EXPENSE_CATEGORY_COLORS}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
           <div>
             <HistorySection month={activeMonth + 1} year={year} updateTrigger={updateTrigger} setUpdateTrigger={setUpdateTrigger} />
           </div>
-          <div>
+          <div className='hidden xl:block'>
             <FromSection setUpdateTrigger={setUpdateTrigger} />
           </div>
         </div>
