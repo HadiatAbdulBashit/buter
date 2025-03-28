@@ -22,7 +22,6 @@ export function DrawerDialogBudget({ setUpdateTrigger }: { setUpdateTrigger: Rea
             <DialogTitle></DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
-          {/* Tambahkan ScrollArea di dalam DialogContent */}
           <ScrollArea className='max-h-[80vh] overflow-y-auto p-2'>
             <FormSection setUpdateTrigger={setUpdateTrigger} />
           </ScrollArea>
@@ -39,13 +38,12 @@ export function DrawerDialogBudget({ setUpdateTrigger }: { setUpdateTrigger: Rea
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        {/* Tambahkan ScrollArea di dalam DrawerContent */}
         <ScrollArea className='max-h-[80vh] overflow-y-auto'>
           <DrawerHeader className='hidden'>
             <DrawerTitle></DrawerTitle>
             <DrawerDescription></DrawerDescription>
           </DrawerHeader>
-          <div className='container mx-auto max-w-sm'>
+          <div className='container mx-auto max-w-sm mt-4'>
             <FormSection setUpdateTrigger={setUpdateTrigger} />
           </div>
           <DrawerFooter className='pt-2 container mx-auto max-w-sm'>

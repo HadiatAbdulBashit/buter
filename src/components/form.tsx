@@ -60,6 +60,7 @@ const FormSection = ({ setUpdateTrigger }: { setUpdateTrigger: React.Dispatch<Re
       localStorage.setItem("budgetData", JSON.stringify(storedData));
 
       toast.success("Budget added successfully");
+      form.reset();
 
       setUpdateTrigger((prev) => prev + 1);
       setIsLoading(false);

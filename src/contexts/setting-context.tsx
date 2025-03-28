@@ -19,8 +19,8 @@ const SettingsContext = createContext<Settings | undefined>(undefined);
 
 export const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
   const defaultCurrency: Currency = { custom: false, symbol: "$", code: "USD" };
-  const defaultPrimaryColor = "#3B82F6"; // Default blue
-  const defaultDateFormat = "yyyy-MM-dd";
+  const defaultPrimaryColor = "#D5232C";
+  const defaultDateFormat = "PPP";
 
   const [currency, setCurrency] = useState<Currency>(() => {
     const stored = localStorage.getItem("currency");
