@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, buttonVariants } from "./components/ui/button";
 import { ScrollArea, ScrollBar } from "./components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui/select";
@@ -13,9 +13,13 @@ import PieChartComponent from "./components/pie-chart";
 import { EXPENSE_CATEGORY_COLORS, EXPENSE_CHART_CONFIG, INCOME_CATEGORY_COLORS, INCOME_CHAR_CONFIG } from "./constants";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "./components/ui/sheet";
 import SettingsComponent from "./components/setting";
-import { cn } from "./lib/utils";
+import { cn, formatCurrency } from "./lib/utils";
+import { useSettings } from "./contexts/setting-context";
+import { AreaChartByDate } from "./components/area-chart-date";
+import { AreaChartByMonth } from "./components/area-chart-month";
 
 function App() {
+  const { currency } = useSettings();
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
   const { setTheme } = useTheme();
@@ -40,13 +44,34 @@ function App() {
     setActiveMonth(filteredMonths.length - 1);
   };
 
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [totalExpense, setTotalExpense] = useState(0);
+
+  useEffect(() => {
+    // Ambil data dari localStorage
+    const storedData = JSON.parse(localStorage.getItem("budgetData") || "{}");
+
+    // Hitung total income dan expense
+    const incomeTotal = storedData.income?.reduce((sum: number, item: any) => sum + item.amount, 0) || 0;
+    const expenseTotal = storedData.expense?.reduce((sum: number, item: any) => sum + item.amount, 0) || 0;
+
+    setTotalIncome(incomeTotal);
+    setTotalExpense(expenseTotal);
+  }, [updateTrigger]);
+
+  const totalBalance = totalIncome - totalExpense;
+
   return (
     <>
       <div className='container mx-auto py-4'>
-        <h1 className='font-semibold text-2xl text-center mb-4 border-b-4 border-b-primary sm:border-0 sm:text-left'>
-          Buter: Budget Tracker
-        </h1>
-        <div className='flex gap-2 items-center mb-2 sm:mb-8 justify-between'>
+        <div className='flex justify-between mb-4 border-b-4 border-b-primary sm:border-0 '>
+          <h1 className='font-semibold text-2xl'>Buter: Budget Tracker</h1>
+          <p className='font-semibold text-2xl'>
+            <span className='hidden sm:inline'>Current Balance: </span>
+            {formatCurrency(totalBalance, currency.symbol)}
+          </p>
+        </div>
+        <div className='flex gap-2 items-center mb-8 justify-between'>
           {/* Months */}
           <ScrollArea className='whitespace-nowrap overflow-hidden'>
             <div className='flex w-max space-x-2'>
@@ -141,6 +166,18 @@ function App() {
                     chartConfigProps={EXPENSE_CHART_CONFIG}
                     categoryColors={EXPENSE_CATEGORY_COLORS}
                   />
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value='item-3'>
+                <AccordionTrigger>Budget per day</AccordionTrigger>
+                <AccordionContent>
+                  <AreaChartByDate selectedMonth={activeMonth + 1} selectedYear={year} updateTrigger={updateTrigger} />
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value='item-4'>
+                <AccordionTrigger>Budget per month</AccordionTrigger>
+                <AccordionContent>
+                  <AreaChartByMonth selectedYear={year} updateTrigger={updateTrigger} />
                 </AccordionContent>
               </AccordionItem>
             </Accordion>

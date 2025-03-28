@@ -4,6 +4,8 @@ import { format, parseISO } from "date-fns";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
+import { useSettings } from "@/contexts/setting-context";
+import { formatCurrency } from "@/lib/utils";
 
 interface HistorySectionProps {
   month: number;
@@ -14,38 +16,38 @@ interface HistorySectionProps {
 
 const HistorySection = ({ month, year, updateTrigger, setUpdateTrigger }: HistorySectionProps) => {
   const [filteredData, setFilteredData] = useState<any[]>([]);
+  const { currency, dateFormat } = useSettings();
 
   useEffect(() => {
-    // Ambil data dari localStorage
     const storedData = JSON.parse(localStorage.getItem("budgetData") || "{}");
 
     if (!storedData.income) storedData.income = [];
     if (!storedData.expense) storedData.expense = [];
 
-    // Gabungkan income & expense, lalu filter berdasarkan bulan & tahun yang diterima
     const allData = [...storedData.income, ...storedData.expense]
       .filter((item) => {
         const itemDate = parseISO(item.date);
         return itemDate.getMonth() + 1 === month && itemDate.getFullYear() === year;
       })
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); // Urutkan berdasarkan tanggal terbaru
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     setFilteredData(allData);
   }, [month, year, updateTrigger]);
 
-  // ✅ Fungsi untuk hapus item
   const handleDelete = (id: string, type: string) => {
-    const storedData = JSON.parse(localStorage.getItem("budgetData") || "{}");
+    const confirmDelete = window.confirm(`Are you sure you want to delete transaction?`);
+    if (!confirmDelete) return;
 
+    const storedData = JSON.parse(localStorage.getItem("budgetData") || "{}");
     if (!storedData[type]) return;
 
-    storedData[type] = storedData[type].filter((item: any) => item.id !== id); // 🆕 Hapus berdasarkan id
+    storedData[type] = storedData[type].filter((item: any) => item.id !== id);
 
     localStorage.setItem("budgetData", JSON.stringify(storedData));
 
     toast.success("Transaction deleted");
 
-    setUpdateTrigger((prev) => prev + 1); // 🔥 Trigger update
+    setUpdateTrigger((prev) => prev + 1);
   };
 
   return (
@@ -66,12 +68,12 @@ const HistorySection = ({ month, year, updateTrigger, setUpdateTrigger }: Histor
                   <div className='flex justify-between'>
                     <CardTitle className='text-lg font-semibold'>{item.category}</CardTitle>
                     <p className={`font-bold ${item.type === "income" ? "text-income" : "text-expense"}`}>
-                      {item.type === "income" ? "+ " : "- "} ${item.amount}
+                      {item.type === "income" ? "+ " : "- "} {formatCurrency(item.amount, currency.symbol)}
                     </p>
                   </div>
                   <div className='flex justify-between items-end gap-2'>
                     <div>
-                      <p className='text-gray-500'>Date: {format(parseISO(item.date), "PPP")}</p>
+                      <p className='text-gray-500'>Date: {format(parseISO(item.date), dateFormat)}</p>
                       {item.note && <p className='text-gray-500'>Note: {item.note}</p>}
                     </div>
                     <Button variant={"outline"} onClick={() => handleDelete(item.id, item.type)} className='p-1'>
@@ -84,7 +86,7 @@ const HistorySection = ({ month, year, updateTrigger, setUpdateTrigger }: Histor
           ))}
         </div>
       ) : (
-        <p className='text-gray-500'>No transactions found for this month.</p>
+        <p className='text-gray-500 text-center'>No transactions found for this month.</p>
       )}
     </>
   );

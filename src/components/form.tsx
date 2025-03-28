@@ -12,10 +12,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "./ui/calendar";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 import { EXPENSE_CATEGORY, INCOME_CATEGORY } from "@/constants";
 import { v4 as uuidv4 } from "uuid";
+import { useSettings } from "@/contexts/setting-context";
 
 const formSchema = z.object({
   type: z.enum(["income", "expense"]),
@@ -27,6 +28,7 @@ const formSchema = z.object({
 
 const FormSection = ({ setUpdateTrigger }: { setUpdateTrigger: React.Dispatch<React.SetStateAction<number>> }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const { currency, dateFormat } = useSettings();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -45,26 +47,23 @@ const FormSection = ({ setUpdateTrigger }: { setUpdateTrigger: React.Dispatch<Re
       const storedData = JSON.parse(localStorage.getItem("budgetData") || "{}");
 
       const newData = {
-        id: uuidv4(), // 🆕 Tambahkan ID unik
+        id: uuidv4(),
         ...data,
-        date: data.date.toISOString(), // Simpan sebagai string ISO agar kompatibel
+        date: data.date.toISOString(),
       };
 
-      // Pastikan ada kategori untuk income dan expense
       if (!storedData.income) storedData.income = [];
       if (!storedData.expense) storedData.expense = [];
 
-      // Tambahkan data baru berdasarkan tipe
       storedData[data.type].push(newData);
 
-      // Simpan kembali ke localStorage
       localStorage.setItem("budgetData", JSON.stringify(storedData));
 
       toast.success("Budget added successfully");
 
       setUpdateTrigger((prev) => prev + 1);
       setIsLoading(false);
-    }, 1);
+    }, 1000);
   };
 
   useEffect(() => {
@@ -154,7 +153,7 @@ const FormSection = ({ setUpdateTrigger }: { setUpdateTrigger: React.Dispatch<Re
                             variant={"outline"}
                             className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
                           >
-                            {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                            {field.value ? format(field.value, dateFormat) : <span>Pick a date</span>}
                             <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
                           </Button>
                         </FormControl>
@@ -190,14 +189,14 @@ const FormSection = ({ setUpdateTrigger }: { setUpdateTrigger: React.Dispatch<Re
                       placeholder='Enter amount'
                       {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))}
-                      className='peer pe-12 ps-6'
+                      className='peer pe-12 ps-10'
                     />
                   </FormControl>
                   <span className='pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-sm text-muted-foreground peer-disabled:opacity-50'>
-                    $
+                    {currency.symbol}
                   </span>
                   <span className='pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 text-sm text-muted-foreground peer-disabled:opacity-50'>
-                    USD
+                    {currency.code}
                   </span>
                 </div>
                 <FormMessage />
@@ -222,7 +221,7 @@ const FormSection = ({ setUpdateTrigger }: { setUpdateTrigger: React.Dispatch<Re
 
           {/* Submit Button */}
           <Button type='submit' disabled={isLoading} className='w-full'>
-            {isLoading && <span className='loader'></span>} Submit
+            {isLoading && <Loader2 className='animate-spin' />} Submit
           </Button>
         </form>
       </Form>

@@ -21,7 +21,7 @@ export default function SettingsPage() {
   const currencyOptions = [
     { custom: false, symbol: "$", code: "USD" },
     { custom: false, symbol: "€", code: "EUR" },
-    { custom: false, symbol: "Rp", code: "IDR" },
+    { custom: false, symbol: "Rp.", code: "IDR" },
     { custom: true, symbol: customSymbol, code: customCode },
   ];
 
@@ -73,7 +73,7 @@ export default function SettingsPage() {
 
       {/* Primary Color Picker */}
       <div className='mb-4'>
-        <Label className='mb-2'>Primary Color</Label>
+        <Label className='mb-2'>Accent Color</Label>
         <Input type='color' value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} className='p-0' />
       </div>
 
@@ -87,7 +87,7 @@ export default function SettingsPage() {
               <SelectValue placeholder={dateFormat} />
             </SelectTrigger>
             <SelectContent>
-              {["yyyy-MM-dd", "dd/MM/yyyy", "MM/dd/yyyy", "dd-MM-yyyy"].map((date, idx) => (
+              {["PPPP", "PP", "P", "d MMM yy", "PPP"].map((date, idx) => (
                 <SelectItem key={idx} value={date}>
                   {format(new Date(), date)}
                 </SelectItem>

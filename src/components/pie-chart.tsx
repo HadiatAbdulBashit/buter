@@ -12,6 +12,8 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useEffect, useState } from "react";
+import { formatCurrency } from "@/lib/utils";
+import { useSettings } from "@/contexts/setting-context";
 
 export default function PieChartComponent({
   selectedMonth,
@@ -31,6 +33,7 @@ export default function PieChartComponent({
   const id = `pie-${selectedBudget}`;
   const [budgetData, setBudgetData] = useState<{ category: string; total: number; fill: string }[]>([]);
   const chartConfig = chartConfigProps satisfies ChartConfig;
+  const { currency } = useSettings();
 
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("budgetData") || "{}");
@@ -88,7 +91,7 @@ export default function PieChartComponent({
                   fill='hsla(var(--foreground))'
                   className='fill-foreground'
                 >
-                  {payload.total}
+                  {formatCurrency(payload.total, currency.symbol)}
                 </text>
               )}
               activeShape={({ outerRadius = 0, ...props }: PieSectorDataItem) => (
@@ -104,7 +107,7 @@ export default function PieChartComponent({
                     return (
                       <text x={viewBox.cx} y={viewBox.cy} textAnchor='middle' dominantBaseline='middle'>
                         <tspan x={viewBox.cx} y={viewBox.cy} className='fill-foreground text-3xl font-bold'>
-                          {totalBudget.toLocaleString()}
+                          {formatCurrency(totalBudget, currency.symbol)}
                         </tspan>
                         <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className='fill-muted-foreground capitalize'>
                           {selectedBudget}
