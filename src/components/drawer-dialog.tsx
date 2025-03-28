@@ -5,7 +5,7 @@ import FormSection from "./form";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { ScrollArea } from "./ui/scroll-area";
-import { LucidePlusCircle, PlusCircle, PlusCircleIcon, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 
 export function DrawerDialogBudget({ setUpdateTrigger }: { setUpdateTrigger: React.Dispatch<React.SetStateAction<number>> }) {
   const [open, setOpen] = useState(false);
@@ -45,10 +45,10 @@ export function DrawerDialogBudget({ setUpdateTrigger }: { setUpdateTrigger: Rea
             <DrawerTitle></DrawerTitle>
             <DrawerDescription></DrawerDescription>
           </DrawerHeader>
-          <div className='p-4'>
+          <div className='container mx-auto max-w-sm'>
             <FormSection setUpdateTrigger={setUpdateTrigger} />
           </div>
-          <DrawerFooter className='pt-2'>
+          <DrawerFooter className='pt-2 container mx-auto max-w-sm'>
             <DrawerClose asChild>
               <Button variant='outline'>Cancel</Button>
             </DrawerClose>

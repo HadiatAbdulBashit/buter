@@ -88,7 +88,7 @@ const FormSection = ({ setUpdateTrigger }: { setUpdateTrigger: React.Dispatch<Re
                   <Card
                     className={cn(
                       "w-full py-2 cursor-pointer border-2 transition-all",
-                      field.value === "income" ? "border-green-500" : "border-gray-300"
+                      field.value === "income" ? "border-income" : "border-gray-300"
                     )}
                     onClick={() => field.onChange("income")}
                   >
@@ -100,7 +100,7 @@ const FormSection = ({ setUpdateTrigger }: { setUpdateTrigger: React.Dispatch<Re
                   <Card
                     className={cn(
                       "w-full py-2 cursor-pointer border-2 transition-all",
-                      field.value === "expense" ? "border-red-500" : "border-gray-300"
+                      field.value === "expense" ? "border-expense" : "border-gray-300"
                     )}
                     onClick={() => field.onChange("expense")}
                   >
@@ -114,29 +114,67 @@ const FormSection = ({ setUpdateTrigger }: { setUpdateTrigger: React.Dispatch<Re
             )}
           />
 
-          {/* Category */}
-          <FormField
-            control={form.control}
-            name='category'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Category</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger className='w-full'>
-                    <SelectValue placeholder={field.value || "Select Category"} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {(form.watch("type") === "income" ? INCOME_CATEGORY : EXPENSE_CATEGORY).map((cat) => (
-                      <SelectItem key={cat} value={cat}>
-                        {cat}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className='flex gap-2 w-full'>
+            {/* Category */}
+            <FormField
+              control={form.control}
+              name='category'
+              render={({ field }) => (
+                <FormItem className='flex-1'>
+                  <FormLabel>Category</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className='w-full'>
+                      <SelectValue placeholder={field.value || "Select Category"} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {(form.watch("type") === "income" ? INCOME_CATEGORY : EXPENSE_CATEGORY).map((cat) => (
+                        <SelectItem key={cat} value={cat}>
+                          {cat}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Date Picker */}
+            <FormField
+              control={form.control}
+              name='date'
+              render={({ field }) => (
+                <FormItem className='flex-1'>
+                  <FormLabel>Date</FormLabel>
+                  <FormControl>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
+                          >
+                            {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                            <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className='w-auto p-0' align='start'>
+                        <Calendar
+                          mode='single'
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           {/* Amount */}
           <FormField
@@ -162,42 +200,6 @@ const FormSection = ({ setUpdateTrigger }: { setUpdateTrigger: React.Dispatch<Re
                     USD
                   </span>
                 </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Date Picker */}
-          <FormField
-            control={form.control}
-            name='date'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Date</FormLabel>
-                <FormControl>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
-                        >
-                          {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-                          <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className='w-auto p-0' align='start'>
-                      <Calendar
-                        mode='single'
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

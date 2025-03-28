@@ -50,7 +50,7 @@ const HistorySection = ({ month, year, updateTrigger, setUpdateTrigger }: Histor
 
   return (
     <>
-      <h2 className='text-xl font-semibold mb-4'>History for {format(new Date(year, month - 1), "MMMM yyyy")}</h2>
+      <h2 className='text-xl font-semibold mb-4 text-center'>History for {format(new Date(year, month - 1), "MMMM yyyy")}</h2>
 
       {filteredData.length > 0 ? (
         <div className='grid gap-2'>
@@ -58,14 +58,14 @@ const HistorySection = ({ month, year, updateTrigger, setUpdateTrigger }: Histor
             <Card
               key={index}
               className={`p-4 border gap-4 flex-row border-l-4 md:border-l-8 ${
-                item.type === "income" ? "border-l-green-500" : "border-l-red-600"
+                item.type === "income" ? "border-l-income" : "border-l-expense"
               }`}
             >
               <div className='grow'>
                 <CardContent className='p-0'>
                   <div className='flex justify-between'>
                     <CardTitle className='text-lg font-semibold'>{item.category}</CardTitle>
-                    <p className={`font-bold ${item.type === "income" ? "text-green-600" : "text-red-600"}`}>
+                    <p className={`font-bold ${item.type === "income" ? "text-income" : "text-expense"}`}>
                       {item.type === "income" ? "+ " : "- "} ${item.amount}
                     </p>
                   </div>
